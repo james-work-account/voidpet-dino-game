@@ -134,6 +134,8 @@ main > button {
   padding: 5px;
   display: grid;
   place-items: center;
+
+  touch-action: manipulation;
 }
 
 #score {
