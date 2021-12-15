@@ -7,6 +7,7 @@ Inspired by the Google Chrome offline dinosaur game, but with some artistic libe
 - Accessibility - most of this is made with empty divs and zero aria-labels. It would be nice if it were properly WCAG-compliant.
 - Testing - this has so far been exclusively tested through manually playing with it. I'd like to get some automated tests in here - with Selenium or something else idk yet.
 - Mobile (landscape) - I didn't make this with Mobile (landscape) in mind. Need to address this.
+- Balance - Currently it's completely random how fast the ground pets come at you. It would be good to make the game incrementally harder, such as adding more things to avoid the higher your score etc. It's not a very easy game to play without good luck at the moment.
 
 ### Credits
 
