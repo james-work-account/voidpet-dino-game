@@ -1,0 +1,201 @@
+:root {
+  --game-width: 600px;
+}
+
+html,
+body,
+button {
+  font-family: "Outfit", sans-serif;
+  font-family: "VT323", monospace;
+}
+
+body {
+  background-color: #e8e9f0;
+}
+
+#game {
+  max-width: var(--game-width);
+  width: 100%;
+  height: 200px;
+  border: 1px solid black;
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+  background-color: white;
+}
+
+#dino {
+  width: 80px;
+  height: 50px;
+  background-image: url(assets/pet.gif);
+  position: relative;
+  top: 150px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+#dino.crouch {
+  height: 25px;
+  top: 175px;
+}
+
+#game.active #dino.jump {
+  animation: jump 0.7s linear;
+}
+
+@keyframes jump {
+  0% {
+    top: 150px;
+  }
+
+  20% {
+    top: 80px;
+  }
+
+  100% {
+    top: 150px;
+  }
+}
+
+.ground-pet {
+  width: 50px;
+  height: 30px;
+  position: absolute;
+  bottom: 0;
+  left: 600px;
+
+  background-image: url(assets/ground-pet.svg);
+  background-size: 100% 100%;
+
+  /* opacity: 0; */
+}
+
+#game.active .ground-pet {
+  opacity: 1;
+  animation: move 1s infinite linear;
+}
+
+.flying-pet {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  bottom: 40px;
+  left: 600px;
+
+  background-image: url(assets/flying-pet.gif);
+  background-size: 100% 100%;
+}
+
+#game.active .flying-pet {
+  opacity: 1;
+  animation: move 8s infinite linear;
+}
+
+@keyframes move {
+  0% {
+    left: 600px;
+  }
+
+  100% {
+    left: -60px;
+  }
+}
+
+#score::before {
+  content: "Score: ";
+}
+
+#high-score::before {
+  content: "High score: ";
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas:
+    "score play-button high-score"
+    "game game game"
+    "game-over game-over game-over"
+    "crouch . jump";
+  gap: 5px;
+  max-width: var(--game-width);
+  margin: auto;
+}
+
+main > * {
+  align-self: center;
+}
+
+main > button {
+  background-color: #4d586f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 5px;
+  display: grid;
+  place-items: center;
+}
+
+#score {
+  justify-self: start;
+  grid-area: score;
+}
+
+#play-game {
+  grid-area: play-button;
+}
+
+main > button:active,
+main > button:focus-visible {
+  transform: translateY(3px);
+}
+
+main > button:hover:not(:disabled) {
+  cursor: pointer;
+}
+
+main > button:disabled {
+  background-color: #8d919a;
+  color: #e8e9f0;
+}
+
+#high-score {
+  justify-self: end;
+  text-align: right;
+  grid-area: high-score;
+}
+
+#game {
+  grid-area: game;
+}
+
+#crouch {
+  grid-area: crouch;
+}
+
+#jump {
+  grid-area: jump;
+}
+
+#crouch,
+#jump {
+  aspect-ratio: 1/1;
+}
+
+#game-over {
+  grid-area: game-over;
+  color: red;
+  text-transform: uppercase;
+  text-align: center;
+  display: none;
+  font-size: 1.5rem;
+}
+
+main.game-over #game-over {
+  display: block;
+}
+
+.score,
+main > button {
+  font-size: 1.5rem;
+}

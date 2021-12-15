@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voidpet Dino Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" href="./assets/ground-pet.svg" type="image/x-icon" />
+  </head>
+  <body>
+    <main>
+      <button id="play-game">Play</button>
+      <div id="score" class="score">00000</div>
+      <div id="high-score" class="score">00000</div>
+      <div id="game" tabindex="0">
+        <div id="dino"></div>
+        <div class="ground-pet"></div>
+        <div class="ground-pet"></div>
+        <div class="flying-pet"></div>
+      </div>
+      <div id="game-over">Game over - press "Play" or your Enter key to play again</div>
+      <button id="crouch" disabled>Crouch (Shift)</button>
+      <button id="jump" disabled>Jump (Space)</button>
+    </main>
+    <script src="./script.js"></script>
+  </body>
+</html>
