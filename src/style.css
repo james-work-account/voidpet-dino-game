@@ -49,6 +49,7 @@ body {
   width: 80px;
   position: relative;
   top: 150px;
+  z-index: 100;
 }
 
 #dino.crouch {
