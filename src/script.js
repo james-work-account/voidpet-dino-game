@@ -11,8 +11,8 @@ const DINO_COLLISION_WIDTH = 50;
 // Game board
 const gameWindow = document.getElementById("game");
 const dino = document.getElementById("dino");
-const groundPets = document.querySelectorAll(".ground-pet");
-const flyingPet = document.querySelector(".flying-pet");
+const getGroundPets = () => document.querySelectorAll(".ground-pet");
+const getFlyingPets = () => document.querySelectorAll(".flying-pet");
 
 const main = document.querySelector("main");
 
@@ -20,6 +20,26 @@ const main = document.querySelector("main");
 const playButton = document.getElementById("play-game");
 const crouchButton = document.getElementById(CROUCH);
 const jumpButton = document.getElementById(JUMP);
+
+// Pets
+function generateNewGroundPet() {
+  const newPet = document.createElement("img");
+  newPet.src = "assets/ground-pet.svg";
+  newPet.alt = "Ground enemy pet";
+  newPet.classList.add("ground-pet");
+  gameWindow.appendChild(newPet);
+}
+function generateNewFlyingPet() {
+  const newPet = document.createElement("img");
+  newPet.src = "assets/flying-pet.gif";
+  newPet.alt = "Flying enemy pet";
+  newPet.classList.add("flying-pet");
+  gameWindow.appendChild(newPet);
+}
+function removeAllEnemyPets() {
+  getGroundPets().forEach((pet) => pet.remove());
+  getFlyingPets().forEach((pet) => pet.remove());
+}
 
 // Scores
 function updateElement(element, score) {
@@ -61,9 +81,11 @@ document.onkeydown = function (event) {
   }
 };
 
-function generateAnimationDuration(elements, element) {
+// Randomise speed of pets
+function generateAnimationDuration(elements, element, startingSpeed) {
+  startingSpeed = startingSpeed || 4;
   const durations = Array.from(elements).map((e) => e.style.animationDuration);
-  let newDuration = `${Math.floor(Math.random() * 5) + 3}s`;
+  let newDuration = `${Math.floor(Math.random() * 3) + startingSpeed}s`;
 
   if (durations.length < 5 && durations.includes(newDuration)) {
     // Avoid duplicate speeds
@@ -77,7 +99,8 @@ let playGame;
 
 function endGame() {
   // End game
-  // alert("Game Over!");
+  getGroundPets().forEach((pet) => (pet.style.left = window.getComputedStyle(pet).getPropertyValue("left")));
+  getFlyingPets().forEach((pet) => (pet.style.left = window.getComputedStyle(pet).getPropertyValue("left")));
   clearInterval(playGame);
   gameWindow.classList.remove(ACTIVE);
   main.classList.add(GAME_OVER);
@@ -92,9 +115,21 @@ function endGame() {
 }
 
 playButton.onclick = function () {
+  // Get starting pets
+  removeAllEnemyPets();
+  generateNewGroundPet();
+  generateNewGroundPet();
+  generateNewFlyingPet();
+
+  const groundPets = Array.from(getGroundPets());
+  const flyingPets = Array.from(getFlyingPets());
+
   // Reset stuff
-  for (const groundPet of groundPets) {
-    generateAnimationDuration(groundPets, groundPet);
+  for (const pet of groundPets) {
+    generateAnimationDuration(groundPets, pet);
+  }
+  for (const pet of flyingPets) {
+    generateAnimationDuration(flyingPets, pet, 7);
   }
   if (playGame) clearInterval(playGame);
   gameWindow.focus();
@@ -117,8 +152,14 @@ playButton.onclick = function () {
     const groundPetsLeft = Array.from(groundPets).map((groundPet) =>
       parseInt(window.getComputedStyle(groundPet).getPropertyValue("left"))
     );
-    const flyingPetTop = parseInt(window.getComputedStyle(flyingPet).getPropertyValue("top"));
-    const flyingPetLeft = parseInt(window.getComputedStyle(flyingPet).getPropertyValue("left"));
+
+    const flyingPetsDimensions = Array.from(flyingPets).map((flyingPet) => {
+      const petStyles = window.getComputedStyle(flyingPet);
+      return {
+        top: parseInt(petStyles.getPropertyValue("top")),
+        left: parseInt(petStyles.getPropertyValue("left")),
+      };
+    });
 
     // Ground pet collision
     for (const groundPetLeft of groundPetsLeft) {
@@ -127,12 +168,14 @@ playButton.onclick = function () {
       }
     }
     // Flying pet collision
-    if (
-      dinoLeft + DINO_COLLISION_WIDTH > flyingPetLeft &&
-      flyingPetLeft > 20 &&
-      flyingPetTop + FLYING_PET_HEIGHT >= dinoTop
-    ) {
-      endGame();
+    for (const flyingPetDimensions of flyingPetsDimensions) {
+      if (
+        dinoLeft + DINO_COLLISION_WIDTH > flyingPetDimensions.left &&
+        flyingPetDimensions.left > 20 &&
+        flyingPetDimensions.top + FLYING_PET_HEIGHT >= dinoTop
+      ) {
+        endGame();
+      }
     }
   }, 50);
 };
